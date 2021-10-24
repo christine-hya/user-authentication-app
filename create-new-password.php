@@ -3,20 +3,29 @@ include_once 'header.php';
 ?>
 
 <section class="signup-form">
-    <h2>Reset your password</h2>
-    <p>An e-mail will be sent to you to reset your password.</p>
 
-    <form action="includes/reset-request.inc.php" method="post">
-        <input type="text" name="email" placeholder="Enter your email address.">
-        <button type="submit" name="reset-request-submit">Reset password</button>
-    </form>
     <?php
-    if (isset($_GET["reset"])) {
-        if ($_GET['reset'] == "success") {
-            echo '<p class="signupsuccess">Check your email!</p>';
+    $selector = $_GET["selector"];
+    $validator = $_GET["validator"];
+
+    if (empty($selector) || empty($validator)) {
+        echo "Could not validate your request!";
+    } else {
+        if (ctype_xdigit($selector) !== false && ctype_xdigit($validator) !== false) {
+    ?>
+            <form action="includes/reset-password.inc" method="post">
+                <input type="hidden" name="selector" value="<?php echo $selector; ?> ">
+                <input type="hidden" name="validator" value="<?php echo $validator; ?> ">
+                <input type="password" name="pwd" value="Enter a new password">
+                <input type="password" name="pwd-repeat" value="Repeat a new password">
+                <button type="submit" name="reset-password-submit">Reset password</button>
+
+            </form>
+    <?php
         }
     }
     ?>
+
 </section>
 
 <?php

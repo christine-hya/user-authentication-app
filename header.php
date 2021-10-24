@@ -9,11 +9,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library Database App</title>
 </head>
 
 <body>
-  
 
         <nav>
             <div class='wrapper'>
@@ -21,11 +20,12 @@
             <ul>
                 <li><a href='index.php'>Home</a></li>
                 <li>About Us</li>
-                <li>Find books</li>
+                
                 <?php 
                 if (isset($_SESSION['usersUid'])) {
-                    echo "<li><a href='signup.php'>Profile page</a></li>";
+                    echo "<li>Profile page</li>";
                     echo "<li><a href='includes/logout.inc.php'>Log out</a></li>";
+                    echo "<li><a href='searchbooks.php'>Search for books</a></li>";
                 }
                 else {
                     echo "<li><a href='signup.php'>Sign up</a></li>";

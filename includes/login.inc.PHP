@@ -1,5 +1,6 @@
-<?php
 
+<?php
+// LOGIN FUNCTIONALITY
 if (isset($_POST['submit'])) {
 
     $username = $_POST['uid'];

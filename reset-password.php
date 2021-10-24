@@ -10,7 +10,11 @@ include_once 'header.php';
         <input type="text" name="email" placeholder="Enter your email address.">
         <button type="submit" name="reset-request-submit">Reset password</button>
     </form>
+
     <?php
+    
+    //SUCCESS MSG AFTER EMAIL WITH LINK HAS BEEN SENT
+
     if (isset($_GET["reset"])) {
         if ($_GET['reset'] == "success") {
             echo '<p>Check your email!</p>';

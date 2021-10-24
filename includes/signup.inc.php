@@ -11,6 +11,8 @@ if (isset($_POST['submit'])) {
     require_once 'dbh.inc.PHP';
     require_once 'functions.inc.PHP';
 
+    //CALLING ERROR FUNCTIONS AND EXECUTING/STOPPING SIGN UP 
+
     if (emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) !== false) {
         header('location: ../signup.php?error=emptyinput');
         exit();

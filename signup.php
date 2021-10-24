@@ -14,6 +14,9 @@
     </form>
 
     <?php 
+
+    //DISPLAY ERROR MESSAGES FOR SIGNUP
+    
         if (isset($_GET['error'])) {
             if ($_GET['error'] == "emptyinput") {
                 echo '<p>Please fill in all fields.</p>';

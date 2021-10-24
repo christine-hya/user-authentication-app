@@ -1,5 +1,5 @@
 <?php
-
+//SIGN UP
 function emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) {
     $result;
     if(empty($name) || empty($email) || empty($username) || empty($pwd) || empty($pwdRepeat)) {
@@ -26,8 +26,7 @@ function invalidEmail($email) {
     $result;
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $result = true;
-    }
-    
+    }   
     else {
         $result = false;
     }
@@ -38,8 +37,7 @@ function pwdMatch($pwd, $pwdRepeat) {
     $result;
     if($pwd !== $pwdRepeat) {
         $result = true;
-    }
-    
+    }   
     else {
         $result = false;
     }
@@ -98,6 +96,7 @@ function emptyInputLogin($username, $pwd) {
     return $result;
 } 
 
+//LOGIN 
 function loginUser($conn, $username, $pwd) {
     $uidExists = uidExists($conn, $username, $username);
 
@@ -119,7 +118,5 @@ function loginUser($conn, $username, $pwd) {
         $_SESSION['usersUid'] = $uidExists['usersUid'];
         header('location: ../searchbooks.php');
         exit();
-
-
     }
 }
