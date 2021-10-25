@@ -97,6 +97,7 @@ function emptyInputLogin($username, $pwd) {
 } 
 
 //LOGIN 
+
 function loginUser($conn, $username, $pwd) {
     $uidExists = uidExists($conn, $username, $username);
 
@@ -112,11 +113,25 @@ function loginUser($conn, $username, $pwd) {
         header('location: ../login.php?error=wronglogin');
         exit();
     }
+
     else if ($checkPwd === true) {
         session_start();
         $_SESSION['usersId'] = $uidExists['usersId'];
         $_SESSION['usersUid'] = $uidExists['usersUid'];
-        header('location: ../searchbooks.php');
+
+        //CHECK ROLE
+        $username = $_SESSION['usersUid'];
+        $query = "SELECT * FROM users WHERE usersUid='". $username 
+        . "'";
+        $result = mysqli_query($conn, $query);
+        $row=mysqli_fetch_array($result);                  
+
+        if ($row['userType'] === 'admin'){
+            header('location: ../admin.php');
+        }
+        if ($row['userType'] === 'member') {
+            header('location: ../searchbooks.php');
         exit();
+        }
     }
 }

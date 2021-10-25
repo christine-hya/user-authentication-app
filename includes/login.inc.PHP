@@ -1,6 +1,8 @@
 
 <?php
+
 // LOGIN FUNCTIONALITY
+
 if (isset($_POST['submit'])) {
 
     $username = $_POST['uid'];
@@ -14,7 +16,9 @@ if (isset($_POST['submit'])) {
         exit();
     }
     loginUser($conn, $username, $pwd);
+    
 }
+
 else {
     header('location: ../login.php');
     exit();

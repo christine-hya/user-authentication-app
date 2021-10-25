@@ -2,6 +2,7 @@
     include_once 'header.php';
 ?>
 
+<!--LOGIN FORM-->
 <section class="signup-form">
     <h2>Log in</h2>
     <form action="includes/login.inc.php" method="post">
@@ -33,6 +34,7 @@
 ?>
 
 <!--FORGOT PASSWORD-->
+
 <br><br>
 <a href="reset-password.php">Forgot your password?</a>
 </section>

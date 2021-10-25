@@ -2,7 +2,9 @@
     include_once 'header.php';
 ?>
 
-<section class="signup-form">
+<!--DISPLAY SIGN-UP FORM-->
+
+<section>
     <h2>Sign Up</h2>
     <form action="includes/signup.inc.php" method="post">
         <input type="text" name="name" placeholder="Full name..."><br><br>

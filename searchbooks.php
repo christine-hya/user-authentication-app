@@ -2,6 +2,7 @@
 
 <?php
 require_once 'includes/dbh.inc.PHP';
+require_once 'includes/functions.inc.PHP';
 include_once 'header.php';
 
 ?>
@@ -10,8 +11,19 @@ include_once 'header.php';
     <?php
     if (isset($_SESSION['usersUid'])) {
        
-        echo "<p>Hello " . $_SESSION['usersUid'] . "</p>";
+        echo "<p>Hello " . $_SESSION['usersUid'] . "</p>";                   
     } 
+    //DISPLAY USERTYPE
+    $username = $_SESSION['usersUid'];
+    // $pwd = $_POST['pwd'];
+    $query = "SELECT * FROM users WHERE usersUid='". $username 
+    . "'";
+    $result = mysqli_query($conn, $query);
+    if($result){
+        while($row=mysqli_fetch_array($result)) {
+            echo "<br>you are logged in as "  . $row['userType'] . "."; 
+        }
+  }
     ?>
 
     <h1>Library Search System</h1>
@@ -28,13 +40,20 @@ include_once 'header.php';
     <h2>Display table</h2>
 
     <?php
-     $conn = new mysqli($serverName, $dBUsername, $dBPassword, $dBName);
+
+    //NEW CONNECTION TO DATABASE
+
+    // $conn = new mysqli($serverName, $dBUsername, $dBPassword, $dBName);
 
     $sql = "SELECT b.bookTitle, b.year, b.genre, b.agegroup, a.authorName
     FROM books AS b INNER JOIN authors AS a
     ON b.authorsId = a.authorsId";
 
-    $result = $conn->query($sql);// Sending the query to SQL
+    //SENDING QUERY TO MySQL
+
+    $result = $conn->query($sql);
+
+    //DISPLAY IN TABLE
 
     if($result){
         if($result->num_rows > 0){
@@ -57,6 +76,7 @@ include_once 'header.php';
     echo $result->fetch_assoc();
 
    ?>
+
     <br><br>
     <a href="index.php">Back to home</a>
 
