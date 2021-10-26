@@ -5,8 +5,8 @@
   * users table.
   *
   */
-  include_once "../config.php";
-  include_once "../common.php";
+  include_once 'config.php';
+  include_once 'common.php';
 
   if (isset($_POST['submit'])) {
     try {

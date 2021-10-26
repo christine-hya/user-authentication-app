@@ -4,8 +4,8 @@
 
 //CONNECT TO DATABASE
 try {
-  include_once "../config.php";
-  include_once "../common.php";
+  include 'config.php';
+  include 'common.php';
 
   $connection = new PDO($dsn, $username, $password, $options);
 

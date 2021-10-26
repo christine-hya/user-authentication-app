@@ -4,8 +4,8 @@
 //ADD NEW BOOK
 
 if (isset($_POST['submit'])) {
-    require "../config.php";
-    require "../common.php";
+    require 'config.php';
+    require 'common.php';
 
   try {
     $connection = new PDO($dsn, $username, $password, $options);
@@ -39,8 +39,8 @@ if (isset($_POST['submit'])) {
 //ADD NEW AUTHOR
 
 if (isset($_POST['addAuthor'])) {
-  require "../config.php";
-  require "../common.php";
+  require "config.php";
+  require "common.php";
 
 try {
   $connection = new PDO($dsn, $username, $password, $options);
