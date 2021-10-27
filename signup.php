@@ -22,28 +22,28 @@
         if (isset($_GET['error'])) {
             if ($_GET['error'] == "emptyinput") {
                 echo '<p>Please fill in all fields.</p>';
-
             }
+
             else if ($_GET['error'] == "invaliduid") {
                 echo '<p>Please choose a valid username.</p>';
-
             }
+
             else if ($_GET['error'] == "invalidemail") {
                 echo '<p>Please choose a valid email.</p>';
-
             }
+
             else if ($_GET['error'] == "passwordsdontmatch") {
                 echo "<p>Passwords don't match.</p>";
-
             }
+
             else if ($_GET['error'] == "stmtfailed") {
                 echo "<p>Something went wrong, please try again.</p>";
-
             }
+
             else if ($_GET['error'] == "usernametaken") {
                 echo "<p>Username and/or email already exists. Please choose another one.</p>";
-
             }
+            
             else if ($_GET['error'] == "none") {
                 echo "<p>Sign up successful!</p>";
             }

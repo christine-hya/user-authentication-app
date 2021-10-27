@@ -70,9 +70,6 @@ try {
 
 ?>
 
-<?php include "../header.php"; 
-?>
-
 <?php if (isset($_POST['submit']) && $statement) { ?>
   <?php echo $_POST['bookTitle']; ?> successfully added.
 <?php } ?>

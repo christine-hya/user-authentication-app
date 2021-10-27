@@ -1,8 +1,9 @@
-
 <?php
 
-// include_once 'config.php';
+include_once 'config.php';
 include_once 'common.php';
+
+//DELETE BOOKS
 
 if (isset($_GET["id"])) {
   try {
@@ -17,7 +18,7 @@ if (isset($_GET["id"])) {
     $statement->execute();
 
     $success = "Book successfully deleted";
-  } catch(PDOException $error) {
+  } catch (PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
   }
 }
@@ -31,12 +32,10 @@ try {
   $statement->execute();
 
   $result = $statement->fetchAll();
-} catch(PDOException $error) {
+} catch (PDOException $error) {
   echo $sql . "<br>" . $error->getMessage();
 }
 ?>
-
-<?php include_once "../header.php"; ?>
 
 <h2>Delete books</h2>
 
@@ -55,20 +54,21 @@ try {
     </tr>
   </thead>
   <tbody>
-  <?php foreach ($result as $row) : ?>
-    <tr>
-      <td><?php echo escape($row["bookId"]); ?></td>
-      <td><?php echo escape($row["bookTitle"]); ?></td>
-      <td><?php echo escape($row["year"]); ?></td>
-      <td><?php echo escape($row["genre"]); ?></td>
-      <td><?php echo escape($row["agegroup"]); ?></td>
-      <td><?php echo escape($row["authorsId"]); ?></td>
-      <td><a href="delete.php?id=<?php echo escape($row["bookId"]); ?>">Delete</a></td>
-    </tr>
-  <?php endforeach; ?>
+    <?php foreach ($result as $row) : ?>
+      <tr>
+        <td><?php echo escape($row["bookId"]); ?></td>
+        <td><?php echo escape($row["bookTitle"]); ?></td>
+        <td><?php echo escape($row["year"]); ?></td>
+        <td><?php echo escape($row["genre"]); ?></td>
+        <td><?php echo escape($row["agegroup"]); ?></td>
+        <td><?php echo escape($row["authorsId"]); ?></td>
+        <td><a href="delete.php?id=<?php echo escape($row["bookId"]); ?>">Delete</a></td>
+      </tr>
+    <?php endforeach; ?>
   </tbody>
 </table>
 
+<br>
 <a href="../admin.php">Back to home</a>
 
 <?php include_once "../footer.php"; ?>

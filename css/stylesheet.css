@@ -1,0 +1,29 @@
+html {
+    box-sizing: border-box;
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+  }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 1.2;
+}
+body{
+   color: whitesmoke;
+   background-color: #291720;
+   font-family: 'Zen Antique Soft', serif;
+}
+
+a{
+  color:whitesmoke;
+}

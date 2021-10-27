@@ -56,13 +56,12 @@
   }
 ?>
 
-<?php include_once "../header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) : ?>
   <?php echo escape($_POST['bookTitle']); ?> successfully updated.
 <?php endif; ?>
 
-<h2>Edit a user</h2>
+<h2>Edit a book</h2>
 
 <form method="post">
     <?php foreach ($book as $key => $value) : ?>
@@ -72,6 +71,7 @@
     <input type="submit" name="submit" value="Submit">
 </form>
 
+<a href="update.php">Back</a><br><br>
 <a href="../admin.php">Back to home</a>
 
 <?php include_once "../footer.php"; ?>
