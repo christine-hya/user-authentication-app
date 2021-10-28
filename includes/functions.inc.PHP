@@ -127,10 +127,10 @@ function loginUser($conn, $username, $pwd) {
         $row=mysqli_fetch_array($result);                  
 
         if ($row['userType'] === 'admin'){
-            header('location: ../admin.php');
+            header('location: ../searchbooks.php?userType=admin');
         }
         if ($row['userType'] === 'member') {
-            header('location: ../searchbooks.php');
+            header('location: ../searchbooks.php?userType=member');
         exit();
         }
     }

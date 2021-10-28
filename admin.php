@@ -1,4 +1,13 @@
 <?php
+$currentPage = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basename(__FILE__)) == 0)
+{
+    http_response_code(404);
+    include('myCustom404.php'); 
+    die('Please log in to access this page'); 
+}
+
 require_once 'includes/dbh.inc.PHP';
 include_once 'header.php';
 @session_start();
@@ -11,9 +20,6 @@ include_once 'header.php';
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link active text-light" aria-current="page" href="admin/create.php">Add</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="admin/read.php">Find</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="admin/update.php">Edit</a>

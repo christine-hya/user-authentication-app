@@ -114,6 +114,6 @@ try {
     </form>
 
     <br><br>
-    <a href="../admin.php">Back to home</a>
+    <a href="../searchbooks.php?userType=admin">Back to home</a>
 
     <?php include_once "../footer.php"; ?>

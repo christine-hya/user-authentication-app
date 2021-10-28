@@ -22,20 +22,25 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container-fluid">
     
-    <a class="nav-item" href="admin.php">Library</a>
+    <a class="nav-item" href="index.php">Library</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="admin.php">Home</a>
+          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
         </li>
 
         <?php 
                 if (isset($_SESSION['usersUid'])) {
                     echo "<li class='nav-item'><a class='nav-link text-light' href='includes/logout.inc.php'>Log out</a></li>";
-                    echo "<li class='nav-item'><a class='nav-link text-light' href='searchbooks.php'>Search</a></li>";
+                    if($_GET['userType'] == 'member'){
+                    echo "<li class='nav-item'><a class='nav-link text-light' href='searchbooks.php?userType=member'>Search</a></li>";
+                    }
+                    if($_GET['userType'] == 'admin'){
+                      echo "<li class='nav-item'><a class='nav-link text-light' href='searchbooks.php?userType=admin'>Search</a></li>";
+                      }
                 }
                 else {
                     echo "<li class='nav-item'><a class='nav-link text-light' href='signup.php'>Sign up</a></li>";
