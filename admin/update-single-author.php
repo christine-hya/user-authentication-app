@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
   <?php endforeach; ?>
   <input type="submit" name="submit" value="Submit">
 </form>
-
+<a href="update.php">Back</a><br><br>
 <a href="../admin.php">Back to home</a>
 
 <?php include_once "../footer.php"; ?>

@@ -3,14 +3,15 @@
 ?>
 
 <!--LOGIN FORM-->
-<section class="signup-form">
-    <h2>Log in</h2>
+<section class="signup-form p-4">
+    <div class="container text-center w-50">
+    <h2 class="mb-2">Log in</h2>
     <form action="includes/login.inc.php" method="post">
-        <input type="text" name="uid" placeholder="Username/Email...">
-        <input type="password" name="pwd" placeholder="Password...">
-        <button type="submit" name="submit">Log in</button>
+        <input class="form-control m-3" type="text" name="uid" placeholder="Username/Email...">
+        <input class="form-control m-3" type="password" name="pwd" placeholder="Password...">
+        <button class="btn btn-primary" type="submit" name="submit">Log in</button>
     </form>
-
+    </div>
    
     <?php 
      

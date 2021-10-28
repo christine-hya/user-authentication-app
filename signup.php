@@ -5,15 +5,17 @@
 <!--DISPLAY SIGN-UP FORM-->
 
 <section>
-    <h2>Sign Up</h2>
+    <div class="container text-center w-50 p-4">
+    <h2 class="mb-3">Sign Up</h2>
     <form action="includes/signup.inc.php" method="post">
-        <input type="text" name="name" placeholder="Full name..."><br><br>
-        <input type="text" name="email" placeholder="Email..."><br><br>
-        <input type="text" name="uid" placeholder="Username..."><br><br>
-        <input type="password" name="pwd" placeholder="Password..."><br><br>
-        <input type="password" name="pwdrepeat" placeholder="Repeat password..."><br><br>
-        <button type="submit" name="submit">Sign Up</button><br>
+        <input class="form-control m-1" type="text" name="name" placeholder="Full name..."><br><br>
+        <input class="form-control m-1" type="text" name="email" placeholder="Email..."><br><br>
+        <input class="form-control m-1" type="text" name="uid" placeholder="Username..."><br><br>
+        <input class="form-control m-1" type="password" name="pwd" placeholder="Password..."><br><br>
+        <input class="form-control m-1" type="password" name="pwdrepeat" placeholder="Repeat password..."><br><br>
+        <button class="btn btn-primary" type="submit" name="submit">Sign Up</button><br>
     </form>
+    </div>
 
     <?php 
 
@@ -56,8 +58,6 @@
         }
 ?>
  
-<a href="reset-password.php">Forgot your password?</a>
-</section>
 
 
 <?php
