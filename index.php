@@ -1,17 +1,16 @@
+<div class="header">
+    <?php
+    include_once 'header.php';
+    ?>
+</div>
+
 <?php
-include_once 'header.php';
+if (isset($_SESSION['usersUid'])) {
+    echo "<div class='m-5 p-5'><p>Hello " . $_SESSION['usersUid'] . "</p></div>";
+}
 ?>
 
-<section>
-    <?php
-    if (isset($_SESSION['usersUid'])) {
-        echo "<p>Hello " . $_SESSION['usersUid'] . "</p>";
-    }
-    ?>
-
-    <h1>Library Search System</h1>
-
-</section>
+<h2 class="m-5">Library Search System</h2>
 
 <?php
 
@@ -19,8 +18,8 @@ include_once 'header.php';
 
 if (!isset($_SESSION['usersUid'])) {
 
-require_once "login.php";
-require_once "signup.php";
+    require_once "login.php";
+    require_once "signup.php";
 }
 
 //SIGN-UP FORM

@@ -7,75 +7,91 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     include('myCustom404.php');
     die('Please log in to access this page');
 }
-
-require_once 'includes/dbh.inc.PHP';
-require_once 'includes/functions.inc.PHP';
-include_once 'header.php';
-session_start();
-$_SESSION['userType'] = $row['userType'];
 ?>
 
-<div class="text-center p-4">
+<div class='header text-white'>
     <?php
-    //DISPLAY USERNAME MSG
-    if (isset($_SESSION['usersUid'])) {
-
-        echo "<p>Hello " . $_SESSION['usersUid'] . "<br>";
-    }
-    //DISPLAY USERTYPE
-    $username = $_SESSION['usersUid'];
-    $query = "SELECT * FROM users WHERE usersUid='" . $username
-        . "'";
+    require_once 'includes/dbh.inc.PHP';
+    require_once 'includes/functions.inc.PHP';
+    include_once 'header.php';
+    session_start();
+    $_SESSION['userType'] = $row['userType'];
     ?>
 
+    <div class="text-center p-4">
+
+        <?php
+        //DISPLAY USERNAME MSG
+
+        if (isset($_SESSION['usersUid'])) {
+
+            echo "<div class='msg-box form-width mx-auto text-dark p-4 m-4'><p>Welcome " . $_SESSION['usersUid'] . ",<br>";
+        }
+        //DISPLAY USERTYPE
+
+        $username = $_SESSION['usersUid'];
+        $query = "SELECT * FROM users WHERE usersUid='" . $username
+            . "'";
+        ?>
 
 
-    <?php
-    $result = mysqli_query($conn, $query);
-    if ($result) {
-        while ($row = mysqli_fetch_array($result)) {
+        <?php
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
 
-            echo "you are logged in as "  . $row['userType'] . ".</p>";
+                echo "you are logged in as "  . $row['userType'] . ".</p></div>";
+                echo "</div>";
+                echo "</div>";
 
-            echo "<div class='container p-4'>
+                echo "<div id='search' class='container p-4'>
 
-                   <div class='row'>     
-                    <div class='col-sm-5 p-3 my-auto text-center'>";
+                   <div class='row mt-5'>     
+                    <div class='col-md-5 text-center'>";
 
-            if ($row['userType'] == 'member') {
-                echo "<h3>Search</h3>
+                if ($row['userType'] == 'member') {
+                    echo "<h4 class='m-3 text-start'>Search</h4>
             <form method='post'>
-                <input class='form-control mb-3 m-3' type='text' id='filter' name='filter' placeholder='Type a book title' />
-                <input class='btn btn-primary' type='submit' name='search' value='Search'/>";
-            } else {
-                echo "<h3>Search</h3>
+            <div class='mx-auto'>
+                <input class='form-control w-75 mx-auto d-inline' type='text' id='filter' name='filter' placeholder='Type a book title' />
+                <button class='btn m-2 text-light d-inline' type='submit' name='search'><i class='fas fa-search'></i></button>
+                </div>";
+                } else {
+                    echo "<h4 class='m-3 text-start'>Search</h4>
             <form method='post'>
-                <input class='form-control mb-3 m-3' type='text' id='filter' name='filter' placeholder='Type a title or author' />
-                <input class='btn btn-primary' type='submit' name='searchAuthor' value='Search'/>";
+            <div class='mx-auto'>
+                <input class='form-control w-75 d-inline' type='text' id='filter' name='filter' placeholder='Type a title or author' />
+                <button class='btn m-2 text-light d-inline' type='submit' name='searchAuthor'><i class='fas fa-search'></i></button>
+                </div>";
+                }
             }
         }
-    }
-    ?>
+        ?>
 
-</div>
+    </div>
 
-<div class="col-sm-4 p-3 my-auto text-center">
+    <div class="col-md-4 text-center">
 
-    <h3>Group by genre</h3>
-    <select class="form-control mb-3 m-3" name="genre" id="genre">
-        <option value="biography">Biography</option>
-        <option value="poetry">Poetry</option>
-        <option value="fiction">Fiction</option>
-        <option value="psychology">Psychology</option>
-    </select>
-    <input class="btn btn-primary" type="submit" name="submitgenre" value="Search genre" onclick="history.go(-1)" ;>
+        <div class='mx-auto'>
 
-</div>
+            <h4 class="m-3 text-start">Group by genre</h4>
+            <select class="form-control w-75 d-inline" name="genre" id="genre">
+                <option value="biography">Biography</option>
+                <option value="poetry">Poetry</option>
+                <option value="fiction">Fiction</option>
+                <option value="psychology">Psychology</option>
+            </select>
+            <button class="btn m-2 text-light d-inline" type="submit" name="submitgenre" value="Search genre" onclick="history.go(-1)"><i class='fas fa-search'></i></button>
+        </div>
 
-<div class="col-sm-3 p-3 my-auto text-center">
-    <input class="btn btn-primary mb-3 m-3" type="submit" name="clear" value="Clear Filters" />
-    </form>
-</div>
+    </div>
+
+    <div class="col-md-3 text-center my-auto">
+
+        <input class="btn m-3" type="submit" name="clear" value="Clear filters" />
+        </form>
+
+    </div>
 
 </div>
 </div>
@@ -83,23 +99,30 @@ $_SESSION['userType'] = $row['userType'];
 
 <br><br>
 
-<?php if ($_GET['userType'] == 'admin') {
-    echo "<ul class='nav justify-content-center'>
+<!--NAVBAR EXTRA-->
+
+<div class="mx-5 my-2 navigation">
+
+    <?php if ($_GET['userType'] == 'admin') {
+        echo "<ul class='nav justify-content-end'>
                 <li class='nav-item'>
-                    <a class='nav-link active text-light' aria-current='page' href='#add'>Add</a>
+                    <a class='nav-link active text-light' aria-current='page' href='#add'>Add <i class='fas fa-plus'></i></a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link text-light' href='admin/update.php'>Edit</a>
+                    <a class='nav-link text-light' href='admin/update.php'>Edit <i class='far fa-edit'></i></a>
                 </li>
 
                 <li class='nav-item'>
-                    <a class='nav-link text-light' href='admin/delete.php'>Delete</a>
+                    <a class='nav-link text-light' href='admin/delete.php'>Delete <i class='fas fa-trash-alt'></i></a>
                 </li>
             </ul>";
-}
-?>
+    }
+    ?>
 
-<div class="mx-auto p-4">
+</div>
+
+<div class="mx-auto pt-0 p-5">
+
     <?php
 
     //CLEAR FILTERS
@@ -136,23 +159,23 @@ $_SESSION['userType'] = $row['userType'];
     if ($searchResult) {
         if ($searchResult->num_rows > 0) {
             echo
-            "<table class='mx-auto p-3' border=1>
+            "<table>
                     <thead>
                         <tr>
-                        <th>Book Title</th>
-                        <th>Year</th>
-                        <th>Genre</th>
-                        <th>Agegroup</th>
-                        <th>Author</th>
+                        <th scope='col'>Book title</th>
+                        <th scope='col'>Year</th>
+                        <th scope='col'>Genre</th>
+                        <th scope='col'>Agegroup</th>
+                        <th scope='col'>Author</th>
                         </tr>
                     </thead>";
             while ($row = $searchResult->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . $row["bookTitle"] . "</td>";
-                echo "<td>" . $row["year"] . "</td>";
-                echo "<td>" . $row["genre"] . "</td>";
-                echo "<td>" . $row["agegroup"] . "</td>";
-                echo "<td>" . $row["authorName"] . "</td>";
+                echo "<td data-label='Book title:'>" . $row["bookTitle"] . "</td>";
+                echo "<td data-label='Due date:'>" . $row["year"] . "</td>";
+                echo "<td data-label='Genre:'>" . $row["genre"] . "</td>";
+                echo "<td data-label='Agegroup:'>" . $row["agegroup"] . "</td>";
+                echo "<td data-label='Author:'>" . $row["authorName"] . "</td>";
                 echo "</tr>";
             }
             echo "</table>";
@@ -160,8 +183,6 @@ $_SESSION['userType'] = $row['userType'];
             echo "Nothing found for " . $search;
         }
     }
-    // echo $searchResult->fetch_assoc();
-
 
     //GROUP BY GENRE
 
@@ -179,23 +200,23 @@ $_SESSION['userType'] = $row['userType'];
         if ($searchResult) {
             if ($searchResult->num_rows > 0) {
                 echo
-                "<table class='mx-auto p-3' border=1>
+                "<table>
                     <thead>
                         <tr>
-                        <th>Book Title</th>
-                        <th>Year</th>
-                        <th>Genre</th>
-                        <th>Agegroup</th>
-                        <th>Author</th>
+                        <th scope='col'>Book Title</th>
+                        <th scope='col'>Year</th>
+                        <th scope='col'>Genre</th>
+                        <th scope='col'>Agegroup</th>
+                        <th scope='col'>Author</th>
                         </tr>
                     </thead>";
                 while ($row = $searchResult->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row["bookTitle"] . "</td>";
-                    echo "<td>" . $row["year"] . "</td>";
-                    echo "<td>" . $row["genre"] . "</td>";
-                    echo "<td>" . $row["agegroup"] . "</td>";
-                    echo "<td>" . $row["authorName"] . "</td>";
+                    echo "<td data-label='Book title:'>" . $row["bookTitle"] . "</td>";
+                    echo "<td data-label='Year:'>" . $row["year"] . "</td>";
+                    echo "<td data-label='Genre:'>" . $row["genre"] . "</td>";
+                    echo "<td data-label='Agegroup:'>" . $row["agegroup"] . "</td>";
+                    echo "<td data-label='Author:'>" . $row["authorName"] . "</td>";
                     echo "</tr>";
                 }
                 echo "</table>";
@@ -215,7 +236,6 @@ $_SESSION['userType'] = $row['userType'];
     } else {
         $sort = 'bookTitle';
     }
-
     if (isset($_GET['order'])) {
         $order = $_GET['order'];
     } else {
@@ -233,23 +253,23 @@ $_SESSION['userType'] = $row['userType'];
             $order == 'DESC' ? $order = 'ASC' : $order = 'DESC';
 
             echo
-            "<table class='mx-auto p-3' border=1>
+            "<table>
                     <thead>
                         <tr>
-                        <th><a href='searchbooks.php?sort=bookTitle&order=$order'>Book Title</a></th>
-                        <th><a href='searchbooks.php?sort=year&order=$order'>Year</a></th>
-                        <th><a href='searchbooks.php?sort=genre&order=$order'>Genre</th>
-                        <th><a href='searchbooks.php?sort=agegroup&order=$order'>Agegroup</a></th>
-                        <th><a href='searchbooks.php?sort=authorName&order=$order'>Author</a></th>
+                        <th scope='col'><a href='searchbooks.php?sort=bookTitle&order=$order'>Book title</a></th>
+                        <th scope='col'><a href='searchbooks.php?sort=year&order=$order'>Year</a></th>
+                        <th scope='col'><a href='searchbooks.php?sort=genre&order=$order'>Genre</th>
+                        <th scope='col'><a href='searchbooks.php?sort=agegroup&order=$order'>Agegroup</a></th>
+                        <th scope='col'><a href='searchbooks.php?sort=authorName&order=$order'>Author</a></th>
                         </tr>
                     </thead>";
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . $row["bookTitle"] . "</td>";
-                echo "<td>" . $row["year"] . "</td>";
-                echo "<td>" . $row["genre"] . "</td>";
-                echo "<td>" . $row["agegroup"] . "</td>";
-                echo "<td>" . $row["authorName"] . "</td>";
+                echo "<td data-label='Book title:'>" . $row["bookTitle"] . "</td>";
+                echo "<td data-label='Year:'>" . $row["year"] . "</td>";
+                echo "<td data-label='Genre:'>" . $row["genre"] . "</td>";
+                echo "<td data-label='Agegroup:'>" . $row["agegroup"] . "</td>";
+                echo "<td data-label='Autor:'>" . $row["authorName"] . "</td>";
                 echo "</tr>";
             }
             echo "</table>";
@@ -259,8 +279,8 @@ $_SESSION['userType'] = $row['userType'];
 
         echo $result->fetch_assoc();
     }
-
     ?>
+
 </div>
 
 <?php
@@ -299,30 +319,41 @@ if (isset($_POST['submitBook'])) {
 }
 ?>
 
+<!--ADD TO TABLES SECTION-->
+
 <?php if (isset($_POST['submitBook']) && $statement) { ?>
     <?php echo $_POST['bookTitle']; ?> successfully added.
 <?php } ?>
+
 <?php if ($_GET['userType'] == 'admin') {
     echo "
- <div id='add'>
-    <h2>Add a book</h2>
+ <div class='container my-4' id='add'>
+   <div class='row'>
 
-    <form method='post'>
+    <div class='col-sm-6 p-3 text-center'>
+    <h3>Add a book</h3>
+
+    <form class='text-start p-4 mx-4' method='post'>
     	<label for='bookTitle'>Book title</label>
-    	<input type='text' name='bookTitle' id='bookTitle'>
+    	<input class='form-control info my-3' type='text' name='bookTitle' id='bookTitle' placeholder='Type a book title'>
     	<label for='year'>Year</label>
-    	<input type='number' name='year' id='year'>
+    	<input class='form-control my-3' type='number' name='year' id='year' placeholder='Type the publishing year'>
 
     	<label for='genre'>Genre</label>
-    	<input type='text' name='genre' id='genre'>
+    	<input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
 
     	<label for='age'>Age Group</label>
-    	<input type='text' name='agegroup' id='agegroup'>
+    	<input class='form-control my-3' type='text' name='agegroup' id='agegroup' placeholder='Type the recommended age group'>
 
     	<label for='authorsId'>Author's Id</label>
-    	<input type='text' name='authorsId' id='authorsId'>
-    	<input type='submit' name='submitBook' value='Submit'>
+    	<input class='form-control my-3' type='text' name='authorsId' id='authorsId' placeholder='Type the Id'>
+        <div class='text-center pt-3'>
+    	<input class='btn' type='submit' name='submitBook' value='Submit'>
+        </div>
     </form>
+ 
+
+    </div>
 
 <br><br>";
 }
@@ -360,6 +391,7 @@ if (isset($_POST['addAuthor'])) {
         echo $sql . "<br>" . $error->getMessage();
     }
 }
+
 ?>
 
 
@@ -368,20 +400,27 @@ if (isset($_POST['addAuthor'])) {
 <?php } ?>
 
 <?php if ($_GET['userType'] == 'admin') {
-    echo "<h2>Add author</h2>
+    echo "
+    <div class='col-sm-6 p-3 text-center my-auto'>
+    <h3>Add an author</h3>
 
-    <form method='post'>
+    <form class='text-start p-4 mx-4' method='post'>
       <label for='authorName'>Author Name</label>
-      <input type='text' name='authorName' id='authorName'>
+      <input class='form-control my-3' type='text' name='authorName' id='authorName' placeholder='Type a name'>
 
       <label for='age'>Age</label>
-      <input type='number' name='age' id='age'>
+      <input class='form-control my-3' type='number' name='age' id='age' placeholder='Type current age of author'>
 
       <label for='genre'>Genre</label>
-      <input type='text' name='genre' id='genre'>
-      <input type='submit' name='addAuthor' value='Submit'>
+      <input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
+      <div class='text-center pt-3'>
+      <input class='btn' type='submit' name='addAuthor' value='Submit'>
+      </div>
     </form>
     </div>
+
+  </div>
+</div>
 <br><br>";
 }
 ?>
