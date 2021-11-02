@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 
 <div class='header text-white'>
     <?php
-    require_once 'includes/dbh.inc.PHP';
+    require 'includes/dbh.inc.PHP';
     require_once 'includes/functions.inc.PHP';
     include_once 'header.php';
     session_start();
@@ -21,22 +21,30 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     <div class="text-center p-4">
 
         <?php
+
         //DISPLAY USERNAME MSG
 
         if (isset($_SESSION['usersUid'])) {
 
             echo "<div class='msg-box form-width mx-auto text-dark p-4 m-4'><p>Welcome " . $_SESSION['usersUid'] . ",<br>";
         }
+
         //DISPLAY USERTYPE
 
         $username = $_SESSION['usersUid'];
-        $query = "SELECT * FROM users WHERE usersUid='" . $username
-            . "'";
-        ?>
 
+        $query = "SELECT * FROM users WHERE usersUid = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt, $query);
 
-        <?php
-        $result = mysqli_query($conn, $query);
+        if (!mysqli_stmt_prepare($stmt, $query)) {
+            exit('There was a connection error');
+        }
+        mysqli_stmt_bind_param($stmt, "s", $username);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
         if ($result) {
             while ($row = mysqli_fetch_array($result)) {
 
@@ -100,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 <br><br>
 
 
-
 <!--NAVBAR EXTRA-->
 
 <div class="mx-5 my-2 navigation">
@@ -144,9 +151,18 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         $sql = "SELECT b.bookTitle, b.year, b.genre, b.agegroup, a.authorName
         FROM books AS b INNER JOIN authors AS a
         ON b.authorsId = a.authorsId 
-        WHERE bookTitle LIKE'" . $search . "'";
+        WHERE bookTitle LIKE ?;";
 
-        $searchResult = $conn->query($sql);
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt, $sql);
+
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            exit('There was an error connecting to the database');
+        }
+        mysqli_stmt_bind_param($stmt, "ss", $search, $search);
+        mysqli_stmt_execute($stmt);
+
+        $searchResult = mysqli_stmt_get_result($stmt);
     } elseif (isset($_POST['searchAuthor'])) {
         $search = '%' . $_POST['filter'] . '%';
         $_SESSION['filter'] = $search;
@@ -154,9 +170,18 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         $sql = "SELECT b.bookTitle, b.year, b.genre, b.agegroup, a.authorName
         FROM books AS b INNER JOIN authors AS a
         ON b.authorsId = a.authorsId 
-        WHERE bookTitle LIKE'" . $search . "' OR a.authorName LIKE '" . $search . "'";
+        WHERE bookTitle LIKE ? OR a.authorName LIKE ?;";
 
-        $searchResult = $conn->query($sql);
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt, $sql);
+
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            exit('There was an error connecting to the database');
+        }
+        mysqli_stmt_bind_param($stmt, "ss", $search, $search);
+        mysqli_stmt_execute($stmt);
+
+        $searchResult = mysqli_stmt_get_result($stmt);
     }
     if ($searchResult) {
         if ($searchResult->num_rows > 0) {
@@ -195,9 +220,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         $sql = "SELECT b.bookTitle, b.year, b.genre, b.agegroup, a.authorName
         FROM books AS b INNER JOIN authors AS a
         ON b.authorsId = a.authorsId 
-        WHERE b.genre LIKE'" . $genre . "'";
+        WHERE b.genre LIKE ?;";
 
-        $searchResult = $conn->query($sql);
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt, $sql);
+
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            exit('There was an error connecting to the database');
+        }
+        mysqli_stmt_bind_param($stmt, "s", $genre);
+        mysqli_stmt_execute($stmt);
+
+        $searchResult = mysqli_stmt_get_result($stmt);
+
 
         if ($searchResult) {
             if ($searchResult->num_rows > 0) {
@@ -233,7 +268,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     //SORT
 
     elseif (isset($_GET['sort'])) {
-
         $sort = $_GET['sort'];
     } else {
         $sort = 'bookTitle';
@@ -246,6 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     $sql = "SELECT b.bookTitle, b.year, b.genre, b.agegroup, a.authorName
     FROM books AS b INNER JOIN authors AS a
     ON b.authorsId = a.authorsId ORDER BY $sort $order";
+
     $result = $conn->query($sql);
 
     if ($result) {
@@ -289,8 +324,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 <?php
 
 //ADD NEW BOOK
-
-
 
 if (isset($_POST['submitBook'])) {
     require 'admin/config.php';
