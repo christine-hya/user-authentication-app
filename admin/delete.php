@@ -35,7 +35,7 @@
       $statement->bindValue(':bookId', $id);
       $statement->execute();
 
-      $success = "Book successfully deleted";
+      $success = "<script type='text/javascript'>alert('Book successfully deleted.')</script>";
     } catch (PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
     }

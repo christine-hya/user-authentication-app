@@ -71,7 +71,9 @@ if (isset($_GET['id'])) {
 <body>
   <div class="form-width mx-auto p-5">
     <?php if (isset($_POST['submit']) && $statement) : ?>
-      <?php echo escape($_POST['bookTitle']); ?> successfully updated.
+      
+    <?php echo '<script type="text/javascript">alert(" ' . escape($_POST['bookTitle']) . ' successfully updated." )</script>'; ?>
+           
     <?php endif; ?>
 
     <h2 class="m-4 text-center">Update book</h2>

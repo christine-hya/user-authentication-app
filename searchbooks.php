@@ -99,6 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 
 <br><br>
 
+
+
 <!--NAVBAR EXTRA-->
 
 <div class="mx-5 my-2 navigation">
@@ -283,9 +285,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 
 </div>
 
+
 <?php
 
 //ADD NEW BOOK
+
+
 
 if (isset($_POST['submitBook'])) {
     require 'admin/config.php';
@@ -319,19 +324,20 @@ if (isset($_POST['submitBook'])) {
 }
 ?>
 
-<!--ADD TO TABLES SECTION-->
-
 <?php if (isset($_POST['submitBook']) && $statement) { ?>
-    <?php echo $_POST['bookTitle']; ?> successfully added.
+    <?php echo '<script type="text/javascript">alert(" ' . $_POST['bookTitle'] . ' successfully added." )</script>'; ?>
 <?php } ?>
 
-<?php if ($_GET['userType'] == 'admin') {
-    echo "
- <div class='container my-4' id='add'>
-   <div class='row'>
+<!--ADD TO TABLES SECTION-->
+<div class='container my-4' id='add'>
+    <div class='row'>
 
-    <div class='col-sm-6 p-3 text-center'>
-    <h3>Add a book</h3>
+        <div class='col-sm-6 p-3 text-center'>
+
+
+            <?php if ($_GET['userType'] == 'admin') {
+                echo
+                "<h3>Add a book</h3>
 
     <form class='text-start p-4 mx-4' method='post'>
     	<label for='bookTitle'>Book title</label>
@@ -356,53 +362,54 @@ if (isset($_POST['submitBook'])) {
     </div>
 
 <br><br>";
-}
-?>
-
-<?php
-
-//ADD NEW AUTHOR
-
-if (isset($_POST['addAuthor'])) {
-    require "admin/config.php";
-    require "admin/common.php";
-
-    try {
-        $connection = new PDO($dsn, $username, $password, $options);
-
-        $new_author = array(
-            "authorName" => $_POST['authorName'],
-            "age"  => $_POST['age'],
-            "genre" => $_POST['genre'],
-        );
-
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "authors",
-            implode(", ", array_keys($new_author)),
-            ":" . implode(", :", array_keys($new_author))
-        );
-
-        //PREPARED STATEMENT
-
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_author);
-    } catch (PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
-    }
-}
-
-?>
+            }
+            ?>
 
 
-<?php if (isset($_POST['addAuthor']) && $statement) { ?>
-    <?php echo $_POST['authorName']; ?> successfully added.
-<?php } ?>
+            <?php
 
-<?php if ($_GET['userType'] == 'admin') {
-    echo "
-    <div class='col-sm-6 p-3 text-center my-auto'>
-    <h3>Add an author</h3>
+            //ADD NEW AUTHOR
+
+            if (isset($_POST['addAuthor'])) {
+                require "admin/config.php";
+                require "admin/common.php";
+
+                try {
+                    $connection = new PDO($dsn, $username, $password, $options);
+
+                    $new_author = array(
+                        "authorName" => $_POST['authorName'],
+                        "age"  => $_POST['age'],
+                        "genre" => $_POST['genre'],
+                    );
+
+                    $sql = sprintf(
+                        "INSERT INTO %s (%s) values (%s)",
+                        "authors",
+                        implode(", ", array_keys($new_author)),
+                        ":" . implode(", :", array_keys($new_author))
+                    );
+
+                    //PREPARED STATEMENT
+
+                    $statement = $connection->prepare($sql);
+                    $statement->execute($new_author);
+                } catch (PDOException $error) {
+                    echo $sql . "<br>" . $error->getMessage();
+                }
+            }
+
+            ?>
+
+            <?php if (isset($_POST['addAuthor']) && $statement) { ?>
+                <?php echo '<script type="text/javascript">alert(" ' . $_POST['authorName'] . ' successfully added." )</script>'; ?>
+            <?php } ?>
+
+            <div class='col-sm-6 p-3 text-center my-auto'>
+
+                <?php if ($_GET['userType'] == 'admin') {
+                    echo
+                    "<h3>Add an author</h3>
 
     <form class='text-start p-4 mx-4' method='post'>
       <label for='authorName'>Author Name</label>
@@ -422,17 +429,20 @@ if (isset($_POST['addAuthor'])) {
   </div>
 </div>
 <br><br>";
-}
-?>
-
-<?php if ($_GET['userType'] == 'member') {
-    echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
-} else {
-    echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
-}
-?>
+                }
+                ?>
 
 
-<?php
-include_once 'footer.php';
-?>
+                <?php
+                //BACK TO HOME
+                if ($_GET['userType'] == 'member') {
+                    echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
+                } else {
+                    echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
+                }
+                ?>
+
+
+                <?php
+                include_once 'footer.php';
+                ?>

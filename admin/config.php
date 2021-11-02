@@ -1,9 +1,13 @@
 <?php
 
-/**
-  * Configuration for database connection
-  *
-  */
+// $host       = "sql106.epizy.com";
+// $username   = "epiz_30249027";
+// $password   = "xVyQLL7J";
+// $dbname     = "epiz_30249027_library";
+// $dsn        = "mysql:host=$host;dbname=$dbname";
+// $options    = array(
+//   PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+// );
 
 $host       = "localhost";
 $username   = "root";
@@ -11,5 +15,5 @@ $password   = "root";
 $dbname     = "library";
 $dsn        = "mysql:host=$host;dbname=$dbname";
 $options    = array(
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-              );
+  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+);
