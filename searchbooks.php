@@ -11,11 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 
 <div class='header text-white'>
     <?php
-    require 'includes/dbh.inc.PHP';
-    require_once 'includes/functions.inc.PHP';
+    require 'includes/dbh.inc.php';
+    require_once 'includes/functions.inc.php';
+    require_once 'admin/common.php';
     include_once 'header.php';
     session_start();
-    $_SESSION['userType'] = $row['userType'];
+  
+   
     ?>
 
     <div class="text-center p-4">
@@ -74,6 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                 }
             }
         }
+
+        $_SESSION['userType'] = $row['userType'];
+        $usertype = $_SESSION['userType'];
+        echo $_SESSION['userType'];
         ?>
 
     </div>
@@ -268,12 +274,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     //SORT
 
     elseif (isset($_GET['sort'])) {
-        $sort = $_GET['sort'];
+        $sort = escape($_GET['sort']);
     } else {
         $sort = 'bookTitle';
     }
     if (isset($_GET['order'])) {
-        $order = $_GET['order'];
+        $order = escape($_GET['order']);
     } else {
         $order = 'ASC';
     }
@@ -293,7 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
             "<table>
                     <thead>
                         <tr>
-                        <th scope='col'><a href='searchbooks.php?sort=bookTitle&order=$order'>Book title</a></th>
+                        <th scope='col'><a href='searchbooks.php?userType=$usertype&sort=bookTitle&order=$order'>Book title</a></th>
                         <th scope='col'><a href='searchbooks.php?sort=year&order=$order'>Year</a></th>
                         <th scope='col'><a href='searchbooks.php?sort=genre&order=$order'>Genre</th>
                         <th scope='col'><a href='searchbooks.php?sort=agegroup&order=$order'>Agegroup</a></th>
@@ -313,7 +319,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         } else {
             echo "Error selecting table " . $conn->error;
         }
-
         echo $result->fetch_assoc();
     }
     ?>
@@ -347,8 +352,6 @@ if (isset($_POST['submitBook'])) {
             ":" . implode(", :", array_keys($new_book))
         );
 
-        //PREPARED STATEMENT
-
         $statement = $connection->prepare($sql);
         $statement->execute($new_book);
     } catch (PDOException $error) {
@@ -362,11 +365,11 @@ if (isset($_POST['submitBook'])) {
 <?php } ?>
 
 <!--ADD TO TABLES SECTION-->
+
 <div class='container my-4' id='add'>
     <div class='row'>
 
         <div class='col-sm-6 p-3 text-center'>
-
 
             <?php if ($_GET['userType'] == 'admin') {
                 echo
@@ -468,10 +471,10 @@ if (isset($_POST['submitBook'])) {
 
                 <?php
                 //BACK TO HOME
-                if ($_GET['userType'] == 'member') {
-                    echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
-                } else {
+                if ($_GET['userType'] == 'admin') {
                     echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
+                } elseif ($_GET['userType'] == 'member'){
+                    echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
                 }
                 ?>
 
