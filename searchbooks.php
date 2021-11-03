@@ -16,8 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     require_once 'admin/common.php';
     include_once 'header.php';
     session_start();
-  
-   
+    $_SESSION['userType'] = $row['userType'];
+    $usertype = $_SESSION['userType'];
+
     ?>
 
     <div class="text-center p-4">
@@ -75,11 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                 </div>";
                 }
             }
+            $_SESSION['userType'] = $row['userType'];
         }
-
-        $_SESSION['userType'] = $row['userType'];
-        $usertype = $_SESSION['userType'];
-        echo $_SESSION['userType'];
         ?>
 
     </div>
@@ -118,20 +116,42 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 
 <div class="mx-5 my-2 navigation">
 
-    <?php if ($_GET['userType'] == 'admin') {
-        echo "<ul class='nav justify-content-end'>
-                <li class='nav-item'>
-                    <a class='nav-link active text-light' aria-current='page' href='#add'>Add <i class='fas fa-plus'></i></a>
-                </li>
-                <li class='nav-item'>
-                    <a class='nav-link text-light' href='admin/update.php'>Edit <i class='far fa-edit'></i></a>
-                </li>
+    <?php
+     $username = $_SESSION['usersUid'];
 
-                <li class='nav-item'>
-                    <a class='nav-link text-light' href='admin/delete.php'>Delete <i class='fas fa-trash-alt'></i></a>
-                </li>
-            </ul>";
-    }
+     $query = "SELECT * FROM users WHERE usersUid = ?;";
+     $stmt = mysqli_stmt_init($conn);
+     mysqli_stmt_prepare($stmt, $query);
+
+     if (!mysqli_stmt_prepare($stmt, $query)) {
+         exit('There was a connection error');
+     }
+     mysqli_stmt_bind_param($stmt, "s", $username);
+     mysqli_stmt_execute($stmt);
+
+     $result = mysqli_stmt_get_result($stmt);
+
+     if ($result) {
+         while ($row = mysqli_fetch_array($result)) {
+
+             if ($row['userType'] == 'admin')
+             {
+                 echo "<ul class='nav justify-content-end'>
+                 <li class='nav-item'>
+                     <a class='nav-link active text-light' aria-current='page' href='#add'>Add <i class='fas fa-plus'></i></a>
+                 </li>
+                 <li class='nav-item'>
+                     <a class='nav-link text-light' href='admin/update.php'>Edit <i class='far fa-edit'></i></a>
+                 </li>
+ 
+                 <li class='nav-item'>
+                     <a class='nav-link text-light' href='admin/delete.php'>Delete <i class='fas fa-trash-alt'></i></a>
+                 </li>
+             </ul>";
+             } 
+         }
+     }
+    
     ?>
 
 </div>
@@ -165,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             exit('There was an error connecting to the database');
         }
-        mysqli_stmt_bind_param($stmt, "ss", $search, $search);
+        mysqli_stmt_bind_param($stmt, "s", $search);
         mysqli_stmt_execute($stmt);
 
         $searchResult = mysqli_stmt_get_result($stmt);
@@ -299,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
             "<table>
                     <thead>
                         <tr>
-                        <th scope='col'><a href='searchbooks.php?userType=$usertype&sort=bookTitle&order=$order'>Book title</a></th>
+                        <th scope='col'><a href='searchbooks.php?sort=bookTitle&order=$order'>Book title</a></th>
                         <th scope='col'><a href='searchbooks.php?sort=year&order=$order'>Year</a></th>
                         <th scope='col'><a href='searchbooks.php?sort=genre&order=$order'>Genre</th>
                         <th scope='col'><a href='searchbooks.php?sort=agegroup&order=$order'>Agegroup</a></th>
@@ -331,36 +351,30 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 //ADD NEW BOOK
 
 if (isset($_POST['submitBook'])) {
-    require 'admin/config.php';
-    require 'admin/common.php';
 
-    try {
-        $connection = new PDO($dsn, $username, $password, $options);
+    $bookTitle = $_POST['bookTitle'];
+    $year = $_POST['year'];
+    $genre = $_POST['genre'];
+    $agegroup = $_POST['agegroup'];
+    $authorsId = $_POST['authorsId'];
 
-        $new_book = array(
-            "bookTitle" => $_POST['bookTitle'],
-            "year"  => $_POST['year'],
-            "genre" => $_POST['genre'],
-            "agegroup" => $_POST['agegroup'],
-            "authorsId" => $_POST['authorsId']
-        );
 
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "books",
-            implode(", ", array_keys($new_book)),
-            ":" . implode(", :", array_keys($new_book))
-        );
+    $sql = "INSERT INTO books (bookTitle, year, genre, agegroup, authorsId) VALUES (?, ?, ?, ?, ?);";
 
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_book);
-    } catch (PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, $sql);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        exit('There was an error connecting to the database');
     }
+    mysqli_stmt_bind_param($stmt, "sssss", $bookTitle, $year, $genre, $agegroup, $authorsId);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 }
+
 ?>
 
-<?php if (isset($_POST['submitBook']) && $statement) { ?>
+<?php if (isset($_POST['submitBook']) && $stmt) { ?>
     <?php echo '<script type="text/javascript">alert(" ' . $_POST['bookTitle'] . ' successfully added." )</script>'; ?>
 <?php } ?>
 
@@ -371,113 +385,158 @@ if (isset($_POST['submitBook'])) {
 
         <div class='col-sm-6 p-3 text-center'>
 
-            <?php if ($_GET['userType'] == 'admin') {
-                echo
-                "<h3>Add a book</h3>
+            <?php 
+             $username = $_SESSION['usersUid'];
 
-    <form class='text-start p-4 mx-4' method='post'>
-    	<label for='bookTitle'>Book title</label>
-    	<input class='form-control info my-3' type='text' name='bookTitle' id='bookTitle' placeholder='Type a book title'>
-    	<label for='year'>Year</label>
-    	<input class='form-control my-3' type='number' name='year' id='year' placeholder='Type the publishing year'>
+             $query = "SELECT * FROM users WHERE usersUid = ?;";
+             $stmt = mysqli_stmt_init($conn);
+             mysqli_stmt_prepare($stmt, $query);
+        
+             if (!mysqli_stmt_prepare($stmt, $query)) {
+                 exit('There was a connection error');
+             }
+             mysqli_stmt_bind_param($stmt, "s", $username);
+             mysqli_stmt_execute($stmt);
+        
+             $result = mysqli_stmt_get_result($stmt);
+        
+             if ($result) {
+                 while ($row = mysqli_fetch_array($result)) {
+        
+                     if ($row['userType'] == 'admin')
+                     {
+                         echo "<h3>Add a book</h3>
 
-    	<label for='genre'>Genre</label>
-    	<input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
-
-    	<label for='age'>Age Group</label>
-    	<input class='form-control my-3' type='text' name='agegroup' id='agegroup' placeholder='Type the recommended age group'>
-
-    	<label for='authorsId'>Author's Id</label>
-    	<input class='form-control my-3' type='text' name='authorsId' id='authorsId' placeholder='Type the Id'>
-        <div class='text-center pt-3'>
-    	<input class='btn' type='submit' name='submitBook' value='Submit'>
-        </div>
-    </form>
- 
-
-    </div>
-
-<br><br>";
-            }
-            ?>
-
-
-            <?php
+                         <form class='text-start p-4 mx-4' method='post'>
+                             <label for='bookTitle'>Book title</label>
+                             <input class='form-control info my-3' type='text' name='bookTitle' id='bookTitle' placeholder='Type a book title'>
+                             <label for='year'>Year</label>
+                             <input class='form-control my-3' type='number' name='year' id='year' placeholder='Type the publishing year'>
+         
+                             <label for='genre'>Genre</label>
+                             <input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
+         
+                             <label for='age'>Age Group</label>
+                             <input class='form-control my-3' type='text' name='agegroup' id='agegroup' placeholder='Type the recommended age group'>
+         
+                             <label for='authorsId'>Author's Id</label>
+                             <input class='form-control my-3' type='text' name='authorsId' id='authorsId' placeholder='Type the Id'>
+                             <div class='text-center pt-3'>
+                             <input class='btn' type='submit' name='submitBook' value='Submit'>
+                             </div>
+                         </form>
+                     
+         
+                         </div>
+         
+                     <br><br>";
+                     } 
+                 }
+             }
+                       
 
             //ADD NEW AUTHOR
 
             if (isset($_POST['addAuthor'])) {
-                require "admin/config.php";
-                require "admin/common.php";
 
-                try {
-                    $connection = new PDO($dsn, $username, $password, $options);
+                $authorName = $_POST['authorName'];
+                $age = $_POST['age'];
+                $genre = $_POST['genre'];
 
-                    $new_author = array(
-                        "authorName" => $_POST['authorName'],
-                        "age"  => $_POST['age'],
-                        "genre" => $_POST['genre'],
-                    );
 
-                    $sql = sprintf(
-                        "INSERT INTO %s (%s) values (%s)",
-                        "authors",
-                        implode(", ", array_keys($new_author)),
-                        ":" . implode(", :", array_keys($new_author))
-                    );
+                $sql = "INSERT INTO authors (authorName, age, genre) VALUES (?, ?, ?);";
 
-                    //PREPARED STATEMENT
+                $stmt = mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt, $sql);
 
-                    $statement = $connection->prepare($sql);
-                    $statement->execute($new_author);
-                } catch (PDOException $error) {
-                    echo $sql . "<br>" . $error->getMessage();
+                if (!mysqli_stmt_prepare($stmt, $sql)) {
+                    exit('There was an error connecting to the database');
                 }
+                mysqli_stmt_bind_param($stmt, "sss", $authorName, $age, $genre);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
             }
 
             ?>
 
-            <?php if (isset($_POST['addAuthor']) && $statement) { ?>
+            <?php if (isset($_POST['addAuthor']) && $stmt) { ?>
                 <?php echo '<script type="text/javascript">alert(" ' . $_POST['authorName'] . ' successfully added." )</script>'; ?>
             <?php } ?>
 
             <div class='col-sm-6 p-3 text-center my-auto'>
 
-                <?php if ($_GET['userType'] == 'admin') {
-                    echo
-                    "<h3>Add an author</h3>
-
-    <form class='text-start p-4 mx-4' method='post'>
-      <label for='authorName'>Author Name</label>
-      <input class='form-control my-3' type='text' name='authorName' id='authorName' placeholder='Type a name'>
-
-      <label for='age'>Age</label>
-      <input class='form-control my-3' type='number' name='age' id='age' placeholder='Type current age of author'>
-
-      <label for='genre'>Genre</label>
-      <input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
-      <div class='text-center pt-3'>
-      <input class='btn' type='submit' name='addAuthor' value='Submit'>
-      </div>
-    </form>
-    </div>
-
-  </div>
-</div>
-<br><br>";
-                }
-                ?>
-
-
                 <?php
+                
+                $username = $_SESSION['usersUid'];
+
+                $query = "SELECT * FROM users WHERE usersUid = ?;";
+                $stmt = mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt, $query);
+           
+                if (!mysqli_stmt_prepare($stmt, $query)) {
+                    exit('There was a connection error');
+                }
+                mysqli_stmt_bind_param($stmt, "s", $username);
+                mysqli_stmt_execute($stmt);
+           
+                $result = mysqli_stmt_get_result($stmt);
+           
+                if ($result) {
+                    while ($row = mysqli_fetch_array($result)) {
+           
+                        if ($row['userType'] == 'admin')
+                        {
+                            echo "<h3>Add an author</h3>
+
+                            <form class='text-start p-4 mx-4' method='post'>
+                            <label for='authorName'>Author Name</label>
+                            <input class='form-control my-3' type='text' name='authorName' id='authorName' placeholder='Type a name'>
+        
+                            <label for='age'>Age</label>
+                            <input class='form-control my-3' type='number' name='age' id='age' placeholder='Type current age of author'>
+        
+                            <label for='genre'>Genre</label>
+                            <input class='form-control my-3' type='text' name='genre' id='genre' placeholder='Type the genre'>
+                            <div class='text-center pt-3'>
+                            <input class='btn' type='submit' name='addAuthor' value='Submit'>
+                            </div>
+                            </form>
+                            </div>
+        
+                        </div>
+                        </div>
+                        <br><br>";
+                        } 
+                    }
+                }
+                
                 //BACK TO HOME
-                if ($_GET['userType'] == 'admin') {
-                    echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
-                } elseif ($_GET['userType'] == 'member'){
-                    echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
+
+                $username = $_SESSION['usersUid'];
+
+                $query = "SELECT * FROM users WHERE usersUid = ?;";
+                $stmt = mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt, $query);
+
+                if (!mysqli_stmt_prepare($stmt, $query)) {
+                    exit('There was a connection error');
+                }
+                mysqli_stmt_bind_param($stmt, "s", $username);
+                mysqli_stmt_execute($stmt);
+
+                $result = mysqli_stmt_get_result($stmt);
+
+                if ($result) {
+                    while ($row = mysqli_fetch_array($result)) {
+                        if ($row['userType'] == 'admin')
+                        {
+                            echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
+                        } elseif ($row['userType'] == 'member') {
+                            echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
+                        }
+                    }
                 }
                 ?>
-
 
                 <?php
                 include_once 'footer.php';
