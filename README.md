@@ -1,6 +1,6 @@
 ## User Authentication App for Databases Course (CodeSpace)
 
-This project consisted of creating a user authentication app with a sign-up and log-in system for a dummy local library with PHP and MySQL. User permissions had to be divided into regular member access and admin access. I used Bootstrap for styling, and implemented prepared statements and MySQLi/PDO to connect to a remote database.
+This project consisted of creating a user authentication app with a sign-up and log-in system for a dummy local library using PHP and MySQL. Access permissions had to be divided into regular member and admin roles. I used Bootstrap for styling, and implemented prepared statements and MySQLi/PDO to connect to a remote database.
 
 Members are able to
 * search for books based on the title
