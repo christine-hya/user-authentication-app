@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                 <button class='btn m-2 text-light d-inline' type='submit' name='searchAuthor'><i class='fas fa-search'></i></button>
                 </div>";
                 }
+                $_SESSION['userType'] = $row['userType'];
             }
-            $_SESSION['userType'] = $row['userType'];
         }
         ?>
 
@@ -258,7 +258,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
         mysqli_stmt_execute($stmt);
 
         $searchResult = mysqli_stmt_get_result($stmt);
-
 
         if ($searchResult) {
             if ($searchResult->num_rows > 0) {
