@@ -12,7 +12,7 @@ include_once 'header.php';
     </form>
 
     <?php
-    
+
     //SUCCESS MSG AFTER EMAIL WITH LINK HAS BEEN SENT
 
     if (isset($_GET["reset"])) {

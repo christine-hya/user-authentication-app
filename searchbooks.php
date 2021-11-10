@@ -4,7 +4,6 @@ $currentPage = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 
 if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basename(__FILE__)) == 0) {
     http_response_code(404);
-    include('myCustom404.php');
     die('Please log in to access this page');
 }
 ?>
@@ -115,9 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 <div class="mx-5 my-2 navigation">
 
     <?php
-             if ($_SESSION['userType'] == 'admin')
-             {
-                 echo "<ul class='nav justify-content-end'>
+    if ($_SESSION['userType'] == 'admin') {
+        echo "<ul class='nav justify-content-end'>
                  <li class='nav-item'>
                      <a class='nav-link active text-light' aria-current='page' href='#add'>Add <i class='fas fa-plus'></i></a>
                  </li>
@@ -129,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                      <a class='nav-link text-light' href='admin/delete.php'>Delete <i class='fas fa-trash-alt'></i></a>
                  </li>
              </ul>";
-            }      
+    }
     ?>
 
 </div>
@@ -362,11 +360,10 @@ if (isset($_POST['submitBook'])) {
 
         <div class='col-sm-6 p-3 text-center'>
 
-            <?php 
-        
-                     if ($_SESSION['userType'] == 'admin')
-                     {
-                         echo "<h3>Add a book</h3>
+            <?php
+
+            if ($_SESSION['userType'] == 'admin') {
+                echo "<h3>Add a book</h3>
 
                          <form class='text-start p-4 mx-4' method='post'>
                              <label for='bookTitle'>Book title</label>
@@ -391,8 +388,8 @@ if (isset($_POST['submitBook'])) {
                          </div>
          
                      <br><br>";
-                     } 
-                                       
+            }
+
 
             //ADD NEW AUTHOR
 
@@ -425,10 +422,9 @@ if (isset($_POST['submitBook'])) {
             <div class='col-sm-6 p-3 text-center my-auto'>
 
                 <?php
-           
-                        if ($_SESSION['userType'] == 'admin')
-                        {
-                            echo "<h3>Add an author</h3>
+
+                if ($_SESSION['userType'] == 'admin') {
+                    echo "<h3>Add an author</h3>
 
                             <form class='text-start p-4 mx-4' method='post'>
                             <label for='authorName'>Author Name</label>
@@ -448,19 +444,20 @@ if (isset($_POST['submitBook'])) {
                         </div>
                         </div>
                         <br><br>";
-                        } 
-                    
-                               
-                //BACK TO HOME
-
-                        if ($_SESSION['userType'] == 'admin')
-                        {
-                            echo "<a class='p-2' href='searchbooks.php?userType=admin'>Back to home</a>";
-                        } elseif ($_SESSION['userType'] == 'member') {
-                            echo "<a class='p-2' href='searchbooks.php?userType=member'>Back to home</a>";
-                        }
-                                   
+                }
                 ?>
+
+                <div class="m-4">
+                    <?php
+                    //BACK TO HOME
+                    if ($_SESSION['userType'] == 'admin') {
+                        echo "<a class='p-3' href='searchbooks.php?userType=admin'>Back to home</a>";
+                    } elseif ($_SESSION['userType'] == 'member') {
+                        echo "<a class='p-3' href='searchbooks.php?userType=member'>Back to home</a>";
+                    }
+
+                    ?>
+                </div>
 
                 <?php
                 include_once 'footer.php';

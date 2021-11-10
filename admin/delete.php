@@ -16,6 +16,18 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 </head>
 
+<div class="m-4">
+<?php
+session_start();
+if ($_SESSION['userType'] == 'member') {
+  die('You need admin rights to access this page');
+}
+if (!isset($_SESSION['usersUid'])){
+  die('You need to be logged in to access this page');
+}
+?>
+</div>
+
 <body>
   <?php
 

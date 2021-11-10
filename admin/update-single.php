@@ -15,6 +15,18 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 </head>
 
+<div class="m-4">
+<?php
+session_start();
+if ($_SESSION['userType'] == 'member') {
+  die('You need admin rights to access this page');
+}
+if (!isset($_SESSION['usersUid'])){
+  die('You need to be logged in to access this page');
+}
+?>
+</div>
+
 <?php
 
 include_once 'config.php';
@@ -71,9 +83,9 @@ if (isset($_GET['id'])) {
 <body>
   <div class="form-width mx-auto p-5">
     <?php if (isset($_POST['submit']) && $statement) : ?>
-      
-    <?php echo '<script type="text/javascript">alert(" ' . escape($_POST['bookTitle']) . ' successfully updated." )</script>'; ?>
-           
+
+      <?php echo '<script type="text/javascript">alert(" ' . escape($_POST['bookTitle']) . ' successfully updated." )</script>'; ?>
+
     <?php endif; ?>
 
     <h2 class="m-4 text-center">Update book</h2>
