@@ -117,24 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
 <div class="mx-5 my-2 navigation">
 
     <?php
-     $username = $_SESSION['usersUid'];
-
-     $query = "SELECT * FROM users WHERE usersUid = ?;";
-     $stmt = mysqli_stmt_init($conn);
-     mysqli_stmt_prepare($stmt, $query);
-
-     if (!mysqli_stmt_prepare($stmt, $query)) {
-         exit('There was a connection error');
-     }
-     mysqli_stmt_bind_param($stmt, "s", $username);
-     mysqli_stmt_execute($stmt);
-
-     $result = mysqli_stmt_get_result($stmt);
-
-     if ($result) {
-         while ($row = mysqli_fetch_array($result)) {
-
-             if ($row['userType'] == 'admin')
+             if ($_SESSION['userType'] == 'admin')
              {
                  echo "<ul class='nav justify-content-end'>
                  <li class='nav-item'>
@@ -148,10 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                      <a class='nav-link text-light' href='admin/delete.php'>Delete <i class='fas fa-trash-alt'></i></a>
                  </li>
              </ul>";
-             } 
-         }
-     }
-    
+            }      
     ?>
 
 </div>
@@ -385,24 +365,8 @@ if (isset($_POST['submitBook'])) {
         <div class='col-sm-6 p-3 text-center'>
 
             <?php 
-             $username = $_SESSION['usersUid'];
-
-             $query = "SELECT * FROM users WHERE usersUid = ?;";
-             $stmt = mysqli_stmt_init($conn);
-             mysqli_stmt_prepare($stmt, $query);
         
-             if (!mysqli_stmt_prepare($stmt, $query)) {
-                 exit('There was a connection error');
-             }
-             mysqli_stmt_bind_param($stmt, "s", $username);
-             mysqli_stmt_execute($stmt);
-        
-             $result = mysqli_stmt_get_result($stmt);
-        
-             if ($result) {
-                 while ($row = mysqli_fetch_array($result)) {
-        
-                     if ($row['userType'] == 'admin')
+                     if ($_SESSION['userType'] == 'admin')
                      {
                          echo "<h3>Add a book</h3>
 
@@ -430,9 +394,7 @@ if (isset($_POST['submitBook'])) {
          
                      <br><br>";
                      } 
-                 }
-             }
-                       
+                                       
 
             //ADD NEW AUTHOR
 
@@ -465,25 +427,8 @@ if (isset($_POST['submitBook'])) {
             <div class='col-sm-6 p-3 text-center my-auto'>
 
                 <?php
-                
-                $username = $_SESSION['usersUid'];
-
-                $query = "SELECT * FROM users WHERE usersUid = ?;";
-                $stmt = mysqli_stmt_init($conn);
-                mysqli_stmt_prepare($stmt, $query);
            
-                if (!mysqli_stmt_prepare($stmt, $query)) {
-                    exit('There was a connection error');
-                }
-                mysqli_stmt_bind_param($stmt, "s", $username);
-                mysqli_stmt_execute($stmt);
-           
-                $result = mysqli_stmt_get_result($stmt);
-           
-                if ($result) {
-                    while ($row = mysqli_fetch_array($result)) {
-           
-                        if ($row['userType'] == 'admin')
+                        if ($_SESSION['userType'] == 'admin')
                         {
                             echo "<h3>Add an author</h3>
 
@@ -506,35 +451,17 @@ if (isset($_POST['submitBook'])) {
                         </div>
                         <br><br>";
                         } 
-                    }
-                }
-                
+                    
+                               
                 //BACK TO HOME
 
-                $username = $_SESSION['usersUid'];
-
-                $query = "SELECT * FROM users WHERE usersUid = ?;";
-                $stmt = mysqli_stmt_init($conn);
-                mysqli_stmt_prepare($stmt, $query);
-
-                if (!mysqli_stmt_prepare($stmt, $query)) {
-                    exit('There was a connection error');
-                }
-                mysqli_stmt_bind_param($stmt, "s", $username);
-                mysqli_stmt_execute($stmt);
-
-                $result = mysqli_stmt_get_result($stmt);
-
-                if ($result) {
-                    while ($row = mysqli_fetch_array($result)) {
-                        if ($row['userType'] == 'admin')
+                        if ($_SESSION['userType'] == 'admin')
                         {
                             echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
-                        } elseif ($row['userType'] == 'member') {
+                        } elseif ($_SESSION['userType'] == 'member') {
                             echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
                         }
-                    }
-                }
+                                   
                 ?>
 
                 <?php
