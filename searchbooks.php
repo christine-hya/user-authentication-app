@@ -59,14 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
                     <div class='col-md-5 text-center'>";
 
                 if ($row['userType'] == 'member') {
-                    echo "<h4 class='m-3 text-start'>Search</h4>
+                    echo "<h4 class='m-3 ms-4 text-start'>Search</h4>
             <form method='post'>
             <div class='mx-auto'>
                 <input class='form-control w-75 mx-auto d-inline' type='text' id='filter' name='filter' placeholder='Type a book title' />
                 <button class='btn m-2 text-light d-inline' type='submit' name='search'><i class='fas fa-search'></i></button>
                 </div>";
                 } else {
-                    echo "<h4 class='m-3 text-start'>Search</h4>
+                    echo "<h4 class='m-3 ms-4 text-start'>Search</h4>
             <form method='post'>
             <div class='mx-auto'>
                 <input class='form-control w-75 d-inline' type='text' id='filter' name='filter' placeholder='Type a title or author' />
@@ -455,9 +455,9 @@ if (isset($_POST['submitBook'])) {
 
                         if ($_SESSION['userType'] == 'admin')
                         {
-                            echo "<a class='p-5' href='searchbooks.php?userType=admin'>Back to home</a>";
+                            echo "<a class='p-2' href='searchbooks.php?userType=admin'>Back to home</a>";
                         } elseif ($_SESSION['userType'] == 'member') {
-                            echo "<a class='p-5' href='searchbooks.php?userType=member'>Back to home</a>";
+                            echo "<a class='p-2' href='searchbooks.php?userType=member'>Back to home</a>";
                         }
                                    
                 ?>
