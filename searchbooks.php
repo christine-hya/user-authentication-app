@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && strcmp(basename($currentPage), basena
     require_once 'includes/functions.inc.php';
     require_once 'admin/common.php';
     include_once 'header.php';
-    session_start();
 
     ?>
 

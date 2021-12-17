@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,12 +33,12 @@ session_start();
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <?php
-          if ($_GET['userType'] == 'member' && isset($_SESSION['usersUid'])) {
+          if (isset($_GET['userType']) == 'member' && isset($_SESSION['usersUid'])) {
             echo "<li class='nav-item'>
           <a class='nav-link active' aria-current='page' href='searchbooks.php?userType=member'>Home</a>
         </li>";
           }
-          if ($_GET['userType'] == 'admin' && isset($_SESSION['usersUid'])) {
+          if (isset($_GET['userType']) == 'admin' && isset($_SESSION['usersUid'])) {
             echo "<li class='nav-item'>
           <a class='nav-link active' aria-current='page' href='searchbooks.php?userType=admin'>Home</a>
         </li>";
